@@ -1,0 +1,12 @@
+#!/bin/bash
+
+function parse_data {
+    rate=$(cat $1/stdout | grep '(active)' | awk '{print $5}')
+    echo $1, $rate
+}
+
+echo Case, Performance
+parse_data small-notallies
+parse_data small-tallies
+parse_data large-notallies
+parse_data large-tallies

@@ -8,7 +8,7 @@
   </mesh>
 
   <tally id="1">
-    <filter type="mesh" bins="3" />
+    <filter type="mesh" bins="1" />
     <nuclides>all</nuclides>
     <scores>total absorption fission nu-fission</scores>
   </tally>

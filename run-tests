@@ -2,19 +2,43 @@
 
 set -e
 
-# Set number of processes and threads
+# Set number of processes and threads ------------------------------------------
+
 NUM_PROCESSES=1
 NUM_THREADS=4
-NUM_PARTICLES=$(expr $MPI_PROCESSES \* $OMP_NUM_THREADS \* 10000)
 
-# Set executable and cross section
-EXE="$(pwd)/openmc/build/bin/openmc -n $NUM_PARTICLES -s $NUM_THREADS"
+# Set executable and cross section ---------------------------------------------
+
+EXE=$(pwd)/openmc/build/bin/openmc
 export CROSS_SECTIONS=$(pwd)/openmc/data/nndc/cross_sections.xml
 
-# Run tests
-for testname in small-notallies small-tallies large-notallies large-tallies; do
-    echo Running $testname
-    cd $testname
-    mpiexec -n $NUM_PROCESSES $EXE > stdout 2>&1
-    cd ..
-done
+# Run tests --------------------------------------------------------------------
+
+# The -n argument to OpenMC gives the number of particles. Here we scale it so
+# that no matter how many MPI processes and OpenMP threads are used, the work
+# per thread is always the same. The -s argument specifies the number of
+# threads.
+
+echo Running small H-M test without tallies
+cd small-notallies
+PARTICLES=$(expr $NUM_PROCESSES \* $NUM_THREADS \* 4000)
+mpiexec -n $NUM_PROCESSES $EXE -n $PARTICLES -s $NUM_THREADS > stdout 2>&1
+cd ..
+
+echo Running small H-M test with tallies
+cd small-tallies
+PARTICLES=$(expr $NUM_PROCESSES \* $NUM_THREADS \* 2000)
+mpiexec -n $NUM_PROCESSES $EXE -n $PARTICLES  -s $NUM_THREADS > stdout 2>&1
+cd ..
+
+echo Running large H-M test without tallies
+cd large-notallies
+PARTICLES=$(expr $NUM_PROCESSES \* $NUM_THREADS \* 400)
+mpiexec -n $NUM_PROCESSES $EXE -n $PARTICLES -s $NUM_THREADS > stdout 2>&1
+cd ..
+
+echo Running large H-M test with tallies
+cd large-tallies
+PARTICLES=$(expr $NUM_PROCESSES \* $NUM_THREADS \* 200)
+mpiexec -n $NUM_PROCESSES $EXE -n $PARTICLES -s $NUM_THREADS > stdout 2>&1
+cd ..

@@ -2,22 +2,27 @@
 
 set -e
 
-# Download OpenMC
-if [[ -d openmc ]]; then
+# Download OpenMC --------------------------------------------------------------
+
+if [[ ! -d openmc ]]; then
     echo Downloading OpenMC...
     git clone https://github.com/mit-crpg/openmc.git
 fi
+cd openmc
 
-# Download cross section library
-cd openmc/data
-if [[ -d nndc ]]; then
+# Download cross section library -----------------------------------------------
+
+if [[ ! -d data/nndc ]]; then
     echo Downloading NNDC cross sections...
+    cd data
     python get_nndc_data.py --batch
+    cd ..
 fi
 
-# Build OpenMC
+# Build OpenMC -----------------------------------------------------------------
+
 echo Building OpenMC...
 mkdir -p build
 cd build
-FC=mpifort cmake ..
+FC=mpifort cmake -Dopenmp=on ..
 make

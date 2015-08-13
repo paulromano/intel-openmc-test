@@ -7,6 +7,8 @@
     <particles>5000</particles>
   </eigenvalue>
 
+  <output tallies="false" />
+
   <source>
     <space>
       <type>fission</type>
