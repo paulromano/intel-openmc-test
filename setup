@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+# Download OpenMC
+if [[ -d openmc ]]; then
+    echo Downloading OpenMC...
+    git clone https://github.com/mit-crpg/openmc.git
+fi
+
+# Download cross section library
+cd openmc/data
+if [[ -d nndc ]]; then
+    echo Downloading NNDC cross sections...
+    python get_nndc_data.py --batch
+fi
+
+# Build OpenMC
+echo Building OpenMC...
+mkdir -p build
+cd build
+FC=mpifort cmake ..
+make

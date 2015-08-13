@@ -1,0 +1,16 @@
+<?xml version='1.0'?>
+<tallies>
+
+  <mesh id="1" type="rectangular">
+    <lower_left>-182.07 -182.07 -183.00</lower_left>
+    <upper_right>182.07  182.07  183.00</upper_right>
+    <dimension>289 289 1</dimension>
+  </mesh>
+
+  <tally id="1">
+    <filter type="mesh" bins="3" />
+    <nuclides>all</nuclides>
+    <scores>total absorption fission nu-fission</scores>
+  </tally>
+
+</tallies>
