@@ -11,7 +11,7 @@ version where the fuel material includes over 400 nuclides (large). For each of
 the small and large models, there are two variants with and without tallies.
 
 *Note*: The final case (large-tallies) requires over 3 GB of memory and as a
- result may not run on some systems.
+result may not run on some systems.
 
 There are three scripts that can be used to set up OpenMC and its required cross
 section data, run the test problems, and collect results. The scripts are as
